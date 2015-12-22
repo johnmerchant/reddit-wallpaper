@@ -1,12 +1,13 @@
 # reddit-wallpaper
 
-Grabs the top image off subreddits and sets it as the desktop wallpaper.
+Grabs the top image from a list of subreddits and sets it as the desktop wallpaper.
 
 ## Configuration
 
 Example ~/.reddit-wallpaper/config.json
 
 	{
+		"subreddits": ["wallpaper", "wallpapers", "castles"]
 		"sort": "top",
 		"from": "day",
 		"score": 100,
