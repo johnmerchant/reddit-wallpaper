@@ -1,0 +1,20 @@
+{
+  "name": "reddit-wallpaper",
+  "version": "1.0.0",
+  "description": "Downloads the top wallpaper from a subreddit and sets it as desktop background.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "John Merchant <john@merchant.on.net>",
+  "license": "ISC",
+  "dependencies": {
+    "async": "^1.5.0",
+    "moment": "^2.10.6",
+    "node-notifier": "^4.4.0",
+    "object-assign": "^4.0.1",
+    "open": "0.0.5",
+    "request": "^2.67.0",
+    "wallpaper": "^2.1.0"
+  }
+}
