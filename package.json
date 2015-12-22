@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "John Merchant <john@merchant.on.net>",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "async": "^1.5.0",
     "moment": "^2.10.6",
