@@ -8,7 +8,7 @@
     "url": "https://github.com/jmercha/reddit-wallpaper" 
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha --reporter spec test"
   },
   "files": [
      "index.js"

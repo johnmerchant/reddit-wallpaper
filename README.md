@@ -1,5 +1,7 @@
 # reddit-wallpaper
 
+[![Build status](https://travis-ci.org/jmercha/reddit-wallpaper.svg?branch=master)](https://travis-ci.org/jmercha/reddit-wallpaper)
+
 Grabs the top image from a list of subreddits and sets it as the desktop wallpaper.
 
 ## Installation
