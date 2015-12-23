@@ -147,7 +147,7 @@ function urlFilePath(url, directory) {
  * Extracts the file extension from a url
  */
 function parseType(url) {
-	var match = matchFile(url);
+	let match = matchFile(url);
 	if (match && match.length > 2) {
 		return match[2];	
 	}
@@ -158,7 +158,7 @@ function parseType(url) {
  * Extracts filename from url
  */
 function matchFile(url) {
-	var match = url.match(/([\w,\s-]+)\.([\w]+)(\?|$|#)/i);
+	let match = url.match(/([\w,\s-]+)\.([\w]+)(\?|$|#)/i);
 	if (match && match.length > 1) { 
 		return match;
 	}
@@ -168,7 +168,7 @@ function matchFile(url) {
  * Parses the resolution tag from link title eg. [1920 x 1080]
  */
 function parseResolution(title) {
-	var match = title.match(/\[\s*(\d+)\s*[×x\*]\s*(\d+)\s*\]/i);
+	let  match = title.match(/\[\s*(\d+)\s*[×x\*]\s*(\d+)\s*\]/i);
 	if (match && match.length > 2) {
 		return {
 			width: parseInt(match[1]),
