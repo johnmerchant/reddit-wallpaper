@@ -16,6 +16,7 @@ const defaults = {
    score: 100,
    domains: ['i.imgur.com', 'imgur.com'],
    types: ['png', 'jpg', 'jpeg'],
+   shuffle: true,
    directory: path.join(getHomeDirectory(), '.reddit-wallpaper'),
    resolution: { width: 1920, height: 1080 }
 };  
@@ -37,7 +38,7 @@ function main() {
 
       return loadSubreddits(options).then(function (subreddits) {
          let link = selectWallpaperLink(options, subreddits);
-         if (link) {
+         if (link && link.url) {
             return downloadAndSetWallpaper(link.url, options.directory).then(image => notify(link, image));
          }
       });
@@ -74,17 +75,17 @@ function selectWallpaperLink(options, subreddits) {
       .filter(subreddit => subreddit.kind === 'Listing' && subreddit.data && subreddit.data.children)
       .map(listing =>
          listing.data.children.filter(link => link.kind === 't3' && link.data).map(link => ({
-				url: link.data.url,
-				subreddit: link.data.subreddit,
-				permalink: link.data.permalink,
-				title: link.data.title,
-				author: link.data.author,
-				score: link.data.score,
-				createdUtc: link.data.created_utc,
-				domain: link.data.domain.toLowerCase(),
-				type: parseType(link.data.url).toLowerCase(),
-				resolution: parseResolution(link.data.title)
-      })))
+            url: link.data.url,
+            subreddit: link.data.subreddit,
+            permalink: link.data.permalink,
+            title: link.data.title,
+            author: link.data.author,
+            score: link.data.score,
+            createdUtc: link.data.created_utc,
+            domain: link.data.domain.toLowerCase(),
+            type: parseType(link.data.url).toLowerCase(),
+            resolution: parseResolution(link.data.title)
+         })))
       .reduce((x, y) => x.concat(y), [])
       .filter(link =>	
          // score
@@ -92,8 +93,8 @@ function selectWallpaperLink(options, subreddits) {
       
          // domains
          && (!options.domains
-         || options.domains.length === 0
-         || options.domains.indexOf(link.domain) >= 0)
+            || options.domains.length === 0
+            || options.domains.indexOf(link.domain) >= 0)
          
          // types
          && (!options.types
@@ -101,9 +102,12 @@ function selectWallpaperLink(options, subreddits) {
             || options.types.indexOf(link.type))
             
          // resolution				
-         && (!options.resolution || link.resolution
+         && (!options.resolution || (link.resolution
             && (link.resolution.width >= options.resolution.width
                && link.resolution.height >= options.resolution.height)))
+         
+         // shuffle
+         && (!options.shuffle || !fileExists(urlFilePath(link.url, options.directory))))
                
       .reduce((x, y) => x.score > y.score ? x : y, { score : 0 });
 }
@@ -112,6 +116,7 @@ function selectWallpaperLink(options, subreddits) {
  * Downloads an image and sets it as wallpaper
  */
 function downloadAndSetWallpaper(url, directory) {
+   
    return downloadFile(url, directory).then(file => wallpaper.set(file).then(() => file));
 }
 
@@ -119,22 +124,23 @@ function downloadAndSetWallpaper(url, directory) {
  * Downloads a file via url
  */
 function downloadFile(url, directory) {
-	var fileName;
-   let fileMatch = matchFile(url);
-	
-	if (fileMatch.length > 2) {
-		fileName = [fileMatch[1], fileMatch[2]].join('.');
-	} else {
-      throw new Error(['URL ', url, ' does not have a filename'].join(''));
-   }
-   
-   let filePath = path.join(directory, fileName);
-   let pipe = request(url).pipe(fs.createWriteStream(filePath));
+   let path = urlFilePath(url, directory);
+   let pipe = request(url).pipe(fs.createWriteStream(path));
    
    return new Promise(function (resolve, reject) {
       pipe.on('finish', () => resolve());
       pipe.on('error', error => reject(error));
-   }).then(() => filePath);
+   }).then(() => path);
+}
+
+/**
+ * Path to write url file
+ */
+function urlFilePath(url, directory) {
+   let match = matchFile(url);
+   if (match.length > 2) {
+      return path.join(directory, [match[1], match[2]].join('.'));
+   }
 }
 
 /**
@@ -196,6 +202,17 @@ function notify(link, icon) {
  */
 function getHomeDirectory() {
   return process.env.HOME || process.env.USERPROFILE;
+}
+
+/**
+ * Check if a file exists
+ */
+function fileExists(path) {
+   try {
+      return fs.statSync(path).isFile();
+   } catch (err) {
+      return false
+   }
 }
 
 if (require.main === module) {
