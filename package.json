@@ -8,7 +8,7 @@
     "url": "https://github.com/jmercha/reddit-wallpaper"
   },
   "scripts": {
-    "test": "node_modules/mocha/bin/mocha"
+    "test": "node_modules/mocha/bin/mocha test"
   },
   "files": [
     "index.js"
