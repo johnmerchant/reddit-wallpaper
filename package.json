@@ -5,18 +5,21 @@
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/jmercha/reddit-wallpaper" 
+    "url": "https://github.com/jmercha/reddit-wallpaper"
   },
   "scripts": {
-    "test": "mocha --reporter spec test"
+    "test": "node_modules/mocha/bin/mocha"
   },
   "files": [
-     "index.js"
+    "index.js"
   ],
   "engines": {
-     "node": ">=0.10.0"
+    "node": ">=0.10.0"
   },
-  "keywords": ["wallpaper", "reddit"],
+  "keywords": [
+    "wallpaper",
+    "reddit"
+  ],
   "author": "John Merchant <john@merchant.on.net>",
   "license": "MIT",
   "dependencies": {
@@ -27,5 +30,8 @@
     "open": "0.0.5",
     "request": "^2.67.0",
     "wallpaper": "^2.1.0"
+  },
+  "devDependencies": {
+    "mocha": "^2.3.4"
   }
 }
