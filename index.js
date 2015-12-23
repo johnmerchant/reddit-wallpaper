@@ -243,7 +243,7 @@ function downloadFile(url, directory, callback) {
 function parseType(url) {
 	var match = matchFile(url);
 	if (match && match.length > 2) {
-		return match[1];	
+		return match[2];	
 	}
 	return '';
 }
@@ -252,7 +252,7 @@ function parseType(url) {
  * Extracts filename from url
  */
 function matchFile(url) {
-	var match = url.match(/(\w+)\.(\w+)(\?|$|#)/i);
+	var match = url.match(/([\w,\s-]+)\.([\w]+)(\?|$|#)/i);
 	if (match && match.length > 1) { 
 		return match;
 	}
@@ -310,5 +310,10 @@ function notify(link, icon, callback) {
 if (require.main === module) {
     main();
 } else {
-	module.exports = main;
+   main.matchFile = matchFile;
+   main.parseResolution = parseResolution;
+   main.parseType = parseType;
+   main.selectWallpaperLink = selectWallpaperLink;
+
+   module.exports = main;
 }
