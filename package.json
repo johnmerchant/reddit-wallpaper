@@ -3,9 +3,17 @@
   "version": "1.0.0",
   "description": "Downloads the top wallpaper from a subreddit and sets it as desktop background.",
   "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jmercha/reddit-wallpaper" 
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "files": [
+     "index.js"
+  ],
+  "keywords": ["wallpaper", "reddit"],
   "author": "John Merchant <john@merchant.on.net>",
   "license": "MIT",
   "dependencies": {

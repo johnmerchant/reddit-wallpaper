@@ -12,23 +12,22 @@ var open = require('open');
 var moment = require('moment');
 
 var defaults = {
-	subreddits: [ 'wallpaper', 'wallpapers', 'castles' ],
-	sort: 'top',
-	from: 'day',
-	score: 100,
-	domains: ['i.imgur.com', 'imgur.com'],
-	types: ['png', 'jpg', 'jpeg'],
-	directory: path.join(getHomeDirectory(), '.reddit-wallpaper'),
-	resolution: { width: 1920, height: 1080 }
+   subreddits: ['wallpaper', 'wallpapers', 'castles'],
+   sort: 'top',
+   from: 'day',
+   score: 100,
+   domains: ['i.imgur.com', 'imgur.com'],
+   types: ['png', 'jpg', 'jpeg'],
+   directory: path.join(getHomeDirectory(), '.reddit-wallpaper'),
+   resolution: { width: 1920, height: 1080 }
 };  
 
 /**
  * Entry point
  */
 function main() {
-	
-	loadConfig(path.join(getHomeDirectory(), '.reddit-wallpaper/config.json'), function (err, options) {
-		if (err) {
+   loadConfig(path.join(getHomeDirectory(), '.reddit-wallpaper/config.json'), function (err, options) {
+   if (err) {
 			console.warn(err);
 		}
 		
