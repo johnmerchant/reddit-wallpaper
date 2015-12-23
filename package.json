@@ -13,6 +13,9 @@
   "files": [
      "index.js"
   ],
+  "engines": {
+     "node": ">=0.10.0"
+  },
   "keywords": ["wallpaper", "reddit"],
   "author": "John Merchant <john@merchant.on.net>",
   "license": "MIT",
