@@ -1,7 +1,7 @@
 var assert = require('assert');
 
 describe('redditWallpaper', function () {
-   var redditWallpaper = require('index');
+   var redditWallpaper = require(__dirname);
    
    describe('#matchFile()', function () {
       it('should match a valid file from url', function () {
