@@ -94,7 +94,7 @@ function selectWallpaperLink(options, subreddits) {
          // domains
          && (!options.domains
             || options.domains.length === 0
-            || options.domains.indexOf(link.domain) >= 0)
+            || options.domains.indexOf(link.domain.toLowerCase()) >= 0)
          
          // types
          && (!options.types
@@ -149,7 +149,7 @@ function urlFilePath(url, directory) {
 function parseType(url) {
 	let match = matchFile(url);
 	if (match && match.length > 2) {
-		return match[2];	
+		return match[2].toLowerCase();	
 	}
 	return '';
 }
