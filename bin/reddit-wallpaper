@@ -4,4 +4,4 @@
 
 process.title = 'reddit-wallpaper';
 
-require('../index.js')();
+require('../')();

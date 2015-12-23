@@ -23,11 +23,9 @@
   "author": "John Merchant <john@merchant.on.net>",
   "license": "MIT",
   "dependencies": {
-    "async": "^1.5.0",
     "moment": "^2.10.6",
     "node-notifier": "^4.4.0",
-    "object-assign": "^4.0.1",
-    "open": "0.0.5",
+    "pify": "^2.3.0",
     "request": "^2.67.0",
     "wallpaper": "^2.1.0"
   },
