@@ -2,6 +2,14 @@
 
 Grabs the top image from a list of subreddits and sets it as the desktop wallpaper.
 
+## Installation
+```
+git clone https://github.com/jmercha/reddit-wallpaper.git
+cd reddit-wallpaper
+npm install
+node --harmony .
+```
+
 ## Configuration
 
 Example ~/.reddit-wallpaper/config.json
