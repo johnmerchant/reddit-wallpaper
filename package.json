@@ -1,6 +1,6 @@
 {
   "name": "reddit-wallpaper",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Downloads the top wallpaper from a subreddit and sets it as desktop background.",
   "main": "index.js",
   "repository": {
