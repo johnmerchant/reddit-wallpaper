@@ -50,7 +50,7 @@ Example ~/.reddit-wallpaper/config.json
 
 ### subreddits
 
-Type: `array`   
+Type: `Array`   
 
 list of subreddits to retrieve links from
 
