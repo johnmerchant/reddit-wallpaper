@@ -23,9 +23,6 @@ const defaults = {
    resolution: { width: 1920, height: 1080 }
 };  
 
-/**
- * Entry point
- */
 function main(config) {
    return loadConfig(config || path.join(userHome, '.reddit-wallpaper', 'config.json'))
       .then(options => loadSubreddits(options)
@@ -34,9 +31,6 @@ function main(config) {
             .then(file => notify(link, file))));
 }
 
-/**
- * Loads configuration file and assigns default options
- */
 function loadConfig(file, callback) {
    return fs.readFileAsync(file).then(function (data) {
       let options = Object.assign(defaults, JSON.parse(data));
@@ -57,24 +51,15 @@ function loadConfig(file, callback) {
    });
 }
 
-/**
- * Loads all subreddit listings
- */
 function loadSubreddits(options) {
    return Promise.all(options.subreddits.map(subreddit => loadSubreddit(options, subreddit)));
 }
 
-/**
- * Loads a subreddit's listing
- */
 function loadSubreddit(options, subreddit) {
    let url = ['https://reddit.com/r/', subreddit, '/', options.sort, '.json?t=', options.from].join('');
    return request(url).then(res => JSON.parse(res));
 }
 
-/**
- * Extracts top link from subreddit listings, meeting the criteria specified in options
- */
 function selectWallpaperLink(options, subreddits) {
    let links = subreddits
       .filter(subreddit => subreddit.kind === 'Listing' && subreddit.data && subreddit.data.children)
@@ -91,22 +76,18 @@ function selectWallpaperLink(options, subreddits) {
             type: parseType(link.data.url).toLowerCase(),
             resolution: parseResolution(link.data.title)
          })))
-      .reduce((x, y) => x.concat(y), []) // flatten
+      .reduce((x, y) => x.concat(y), [])
       .filter(link =>    
-         // score
          (!link.score || link.score >= options.score)
          
-         // domains
          && (!options.domains
             || options.domains.length === 0
             || options.domains.indexOf(link.domain.toLowerCase()) >= 0)
          
-         // types
          && (!options.types
             || options.types.length === 0
             || options.types.indexOf(link.type) >= 0)
-            
-         // resolution                
+                   
          && (!options.resolution || (link.resolution
             && (link.resolution.width >= options.resolution.width
                && link.resolution.height >= options.resolution.height))));
@@ -125,16 +106,10 @@ function selectMaxLink(x, y) {
    return x.score > y.score ? x : y;
 }
 
-/**
- * Downloads an image and sets it as wallpaper
- */
 function downloadAndSetWallpaper(url, directory) {
    return downloadFile(url, directory).then(file => wallpaper.set(file).then(() => file));
 }
 
-/**
- * Downloads a file via url
- */
 function downloadFile(url, directory) {
    let urlPath = urlFilePath(url, directory);
    return request(url, { encoding: null })
@@ -142,9 +117,6 @@ function downloadFile(url, directory) {
       .then(() => urlPath);
 }
 
-/**
- * Path to write url file
- */
 function urlFilePath(url, directory) {
    let match = matchFile(url);
    if (match.length > 2) {
@@ -152,9 +124,6 @@ function urlFilePath(url, directory) {
    }
 }
 
-/**
- * Extracts the file extension from a url
- */
 function parseType(url) {
     let match = matchFile(url);
     if (match && match.length > 2) {
@@ -163,9 +132,6 @@ function parseType(url) {
     return '';
 }
 
-/**
- * Extracts filename from url
- */
 function matchFile(url) {
     let match = url.match(/([\w,\s-]+)\.([\w]+)(\?|$|#)/i);
     if (match && match.length > 1) { 
@@ -173,9 +139,6 @@ function matchFile(url) {
     }
 }
 
-/** 
- * Parses the resolution tag from link title eg. [1920 x 1080]
- */
 function parseResolution(title) {
     let match = title.match(/\[\s*(\d+)\s*[×x\*]\s*(\d+)\s*\]/i);
     if (match && match.length > 2) {
@@ -185,10 +148,7 @@ function parseResolution(title) {
         };
     }
 }
- 
-/**
- * Shows a toast notification
- */
+
 function notify(link, icon) {
    let url = 'https://reddit.com' + link.permalink;
    notifier.notify({
