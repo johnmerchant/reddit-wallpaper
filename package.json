@@ -23,10 +23,13 @@
   "author": "John Merchant <john@merchant.on.net>",
   "license": "MIT",
   "dependencies": {
+    "bluebird": "^3.1.1",
+    "expand-tilde": "^1.2.0",
     "moment": "^2.10.6",
     "node-notifier": "^4.4.0",
-    "pify": "^2.3.0",
-    "request": "^2.67.0",
+    "request-promise": "^1.0.2",
+    "tilde-expansion": "0.0.0",
+    "user-home": "^2.0.0",
     "wallpaper": "^2.1.0"
   },
   "devDependencies": {

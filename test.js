@@ -3,6 +3,7 @@
 const assert = require('assert');
 
 describe('redditWallpaper', function () {
+   
    const redditWallpaper = require(__dirname);
    
    describe('#matchFile()', function () {
