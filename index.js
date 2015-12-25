@@ -27,7 +27,7 @@ const defaults = {
  * Entry point
  */
 function main(config) {
-   return loadConfig(config)
+   return loadConfig(config || path.join(userHome, '.reddit-wallpaper', 'config.json'))
       .then(options => loadSubreddits(options)
          .then(subreddits => selectWallpaperLink(options, subreddits))
          .then(link => downloadAndSetWallpaper(link.url, options.directory)
@@ -177,7 +177,7 @@ function matchFile(url) {
  * Parses the resolution tag from link title eg. [1920 x 1080]
  */
 function parseResolution(title) {
-    let  match = title.match(/\[\s*(\d+)\s*[×x\*]\s*(\d+)\s*\]/i);
+    let match = title.match(/\[\s*(\d+)\s*[×x\*]\s*(\d+)\s*\]/i);
     if (match && match.length > 2) {
         return {
             width: parseInt(match[1]),
@@ -213,11 +213,11 @@ function notify(link, icon) {
  * Check if a file exists
  */
 function fileExists(filePath) {
-   return filePath ? fs.statAsync(filePath).catch(e => false) : Promise.resolve(false);;
+   return filePath ? fs.statAsync(filePath).catch(e => false) : Promise.resolve(false);
 }
 
 if (require.main === module) {
-   main(path.join(userHome, '.reddit-wallpaper', 'config.json'));   
+   main();   
 } else {
    main.matchFile = matchFile;
    main.parseType = parseType;
