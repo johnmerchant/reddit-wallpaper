@@ -13,6 +13,9 @@
   "files": [
     "index.js"
   ],
+  "bin": {
+     "reddit-wallpaper": "bin/reddit-wallpaper"
+  },
   "engines": {
     "node": ">=4.0.0"
   },
