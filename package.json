@@ -1,6 +1,6 @@
 {
   "name": "reddit-wallpaper",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Downloads the top wallpaper from a subreddit and sets it as desktop background.",
   "main": "index.js",
   "repository": {
@@ -11,7 +11,8 @@
     "test": "node_modules/mocha/bin/mocha"
   },
   "files": [
-    "index.js"
+    "index.js",
+    "bin/reddit-wallpaper"
   ],
   "bin": {
      "reddit-wallpaper": "bin/reddit-wallpaper"
@@ -21,7 +22,17 @@
   },
   "keywords": [
     "wallpaper",
-    "reddit"
+    "reddit",
+    "desktop",
+    "background",
+    "picture",
+    "pic",
+    "linux",
+    "osx",
+    "windows",
+    "win",
+    "cli",
+    "cli-app"
   ],
   "author": "John Merchant <john@merchant.on.net>",
   "license": "MIT",

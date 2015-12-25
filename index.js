@@ -28,7 +28,8 @@ function main(config) {
       .then(options => loadSubreddits(options)
          .then(subreddits => selectWallpaperLink(options, subreddits))
          .then(link => downloadAndSetWallpaper(link.url, options.directory)
-            .then(file => notify(link, file))));
+            .then(file => notify(link, file))
+            .then(() => link)));
 }
 
 function loadConfig(file, callback) {
@@ -151,27 +152,34 @@ function parseResolution(title) {
 
 function notify(link, icon) {
    let url = 'https://reddit.com' + link.permalink;
-   notifier.notify({
-      title: link.title,
-      subtitle: link.subreddit,
-      open: url,
-      wait: true,
-      message: [
-         '/r/',
-         link.subreddit,
-         ' ',
-         link.score,
-         ' points, ',
-         moment.unix(link.createdUtc).fromNow(),
-         ' by ',
-         link.author
-      ].join('')
+   
+   return new Promise(function(resolve, reject) {
+      notifier.notify({
+         title: link.title,
+         subtitle: link.subreddit,
+         open: url,
+         wait: true,
+         message: [
+            '/r/',
+            link.subreddit,
+            ' ',
+            link.score,
+            ' points, ',
+            moment.unix(link.createdUtc).fromNow(),
+            ' by ',
+            link.author
+         ].join('')
+      }, function (err, res) {
+         if (err) {
+            reject(err);
+            return;
+         }
+         
+         resolve(res);
+      });
    });
 }
 
-/**
- * Check if a file exists
- */
 function fileExists(filePath) {
    return filePath ? fs.statAsync(filePath).catch(e => false) : Promise.resolve(false);
 }
