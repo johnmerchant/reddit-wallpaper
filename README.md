@@ -11,8 +11,6 @@ Grabs the top image from a list of subreddits and sets it as the desktop wallpap
 npm install -g reddit-wallpaper
 ```
 
-You could set it up to run on session logon or as a cronjob.
-
 ## Usage
 
 From node:
@@ -28,6 +26,8 @@ From CLI:
 ```
 reddit-wallpaper
 ```
+
+For example, you could run it on session logon or as a cronjob.
 
 ## Configuration
 
