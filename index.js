@@ -27,9 +27,10 @@ function main(config) {
    return loadConfig(config || path.join(userHome, '.reddit-wallpaper', 'config.json'))
       .then(options => loadSubreddits(options)
          .then(subreddits => selectWallpaperLink(options, subreddits))
-         .then(link => downloadAndSetWallpaper(link.url, options.directory)
-            .then(file => notify(link, file))
-            .then(() => link)));
+         .then(link => downloadFile(link.url, options.directory)
+            .then(file => wallpaper.set(file)
+               .then(() => notify(link, file))
+               .then(() => link))));
 }
 
 function loadConfig(file, callback) {
@@ -107,15 +108,11 @@ function selectMaxLink(x, y) {
    return x.score > y.score ? x : y;
 }
 
-function downloadAndSetWallpaper(url, directory) {
-   return downloadFile(url, directory).then(file => wallpaper.set(file).then(() => file));
-}
-
 function downloadFile(url, directory) {
-   let urlPath = urlFilePath(url, directory);
+   let file = urlFilePath(url, directory);
    return request(url, { encoding: null })
-      .then(data => fs.writeFileAsync(urlPath, data))
-      .then(() => urlPath);
+      .then(data => fs.writeFileAsync(file, data))
+      .then(() => file);
 }
 
 function urlFilePath(url, directory) {

@@ -52,7 +52,7 @@ Example ~/.reddit-wallpaper/config.json
 
 Type: `Array`   
 
-list of subreddits to retrieve links from
+List of subreddit names to retrieve links from.
 
 ### sort
 
