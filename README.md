@@ -35,7 +35,7 @@ Example ~/.reddit-wallpaper/config.json
 
 ```
 {
-   "subreddits": ["wallpaper", "wallpapers", "castles"]
+   "subreddits": ["wallpaper", "wallpapers", "castles"],
    "sort": "top",
    "from": "month",
    "score": 100,
