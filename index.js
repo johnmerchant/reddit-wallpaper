@@ -25,12 +25,13 @@ const defaults = {
 
 function main(config) {
    return loadConfig(config || path.join(userHome, '.reddit-wallpaper', 'config.json'))
-      .then(options => loadSubreddits(options)
-         .then(subreddits => selectWallpaperLink(options, subreddits))
-         .then(link => downloadFile(link.url, options.directory)
-            .then(file => wallpaper.set(file)
-               .then(() => notify(link, file))
-               .then(() => link))));
+      .then(options => ensureDirectoryExists(options.directory)
+         .then(() => loadSubreddits(options)
+            .then(subreddits => selectWallpaperLink(options, subreddits))
+            .then(link => downloadFile(link.url, options.directory)
+               .then(file => wallpaper.set(file)
+                  .then(() => notify(link, file))
+                  .then(() => link)))));
 }
 
 function loadConfig(file, callback) {
@@ -178,7 +179,29 @@ function notify(link, icon) {
 }
 
 function fileExists(filePath) {
-   return filePath ? fs.statAsync(filePath).catch(e => false) : Promise.resolve(false);
+   return filePath
+      ? fs.statAsync(filePath)
+         .then(file => file.isFile())
+         .catch(() => false)
+      : Promise.resolve(false);
+}
+
+function directoryExists(directory) {
+   return directory
+      ? fs.statAsync(directory)
+         .then(dir => dir.isDirectory())
+         .catch(() => false)
+      : Promise.resolve(false);
+}
+
+function ensureDirectoryExists(directory) {
+   return directoryExists(directory).then(function (exists) {
+      if (exists) {
+         return;
+      }
+         
+      return fs.mkdirAsync(directory);
+   });
 }
 
 if (require.main === module) {
