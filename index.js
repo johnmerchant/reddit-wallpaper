@@ -24,12 +24,14 @@ const defaults = {
 };  
 
 function main(config) {
-   if (typeof config === 'string') {
+   if (typeof config === 'string' && config !== '') {
       return loadConfig(config).then(run);
-   } else if (typeof config === 'undefined' || config === null) {
+   } else if (config === '' || typeof config === 'undefined' || config === null) {
       return loadConfig(path.join(userHome, '.reddit-wallpaper', 'config.json')).then(run);
-   } else {
+   } else if (typeof config === 'object') {
       return run(config);
+   } else {
+      throw new TypeError('Expected string or object, got ' + typeof config);
    }
 }
 
