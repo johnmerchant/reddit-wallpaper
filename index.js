@@ -166,8 +166,8 @@ function controversy(link) {
       return 0;
    }
    
-   let magnitude = link.ups + links.downs;
-   let balance = link.ups > link.downs ? link.downs / link.ups : link.ups / link.downs;
+   let magnitude = link.ups + link.downs;
+   let balance = link.ups > link.downs ? (link.downs / link.ups) : (link.ups / link.downs);
    
    return Math.pow(magnitude, balance);
 }
