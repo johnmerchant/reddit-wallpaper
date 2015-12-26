@@ -5,7 +5,7 @@ const fs = Promise.promisifyAll(require('fs'));
 const path = Promise.promisifyAll(require('path'));
 
 const request = require('request-promise');
-const userHome = require('user-home');
+const home = require('user-home');
 const expandTilde = require('expand-tilde');
 const wallpaper = require('wallpaper');
 const notifier = require('node-notifier');
@@ -19,7 +19,7 @@ const defaults = {
    domains: ['i.imgur.com', 'imgur.com'],
    types: ['png', 'jpg', 'jpeg'],
    shuffle: true,
-   directory: path.join(userHome, '.reddit-wallpaper'),
+   directory: path.join(home, '.reddit-wallpaper'),
    resolution: { width: 1920, height: 1080 }
 };  
 
@@ -27,9 +27,9 @@ function main(config) {
    if (typeof config === 'string' && config !== '') {
       return loadConfig(config).then(run);
    } else if (config === '' || typeof config === 'undefined' || config === null) {
-      return loadConfig(path.join(userHome, '.reddit-wallpaper', 'config.json')).then(run);
+      return loadConfig(path.join(home, '.reddit-wallpaper', 'config.json')).then(run);
    } else if (typeof config === 'object') {
-      return run(Object.assign(defaults, config));
+      return run(assignConfig(config));
    } else {
       throw new TypeError('Expected string or object, got ' + typeof config);
    }
@@ -47,21 +47,23 @@ function run(options) {
    
 
 function loadConfig(file) {
-   return fs.readFileAsync(file).then(function (data) {
-      let options = Object.assign(defaults, JSON.parse(data));
+   return fs.readFileAsync(file).then(data => assignConfig(JSON.parse(data)));
+}
 
-      if (options.domains) {
-         options.domains = options.domains.map(domain => domain.toLowerCase());
-      }
-      if (options.files) {
-         options.files = options.files.map(file => file.toLowerCase());
-      }
-      if (options.directory.indexOf('~') >= 0) {
-         options.directory = expandTilde(options.directory);
-      }
-      
-      return options;
-   });
+function assignConfig(options) {
+   options = Object.assign(defaults, options);
+
+   if (options.domains) {
+      options.domains = options.domains.map(domain => domain.toLowerCase());
+   }
+   if (options.files) {
+      options.files = options.files.map(file => file.toLowerCase());
+   }
+   if (options.directory.indexOf('~') >= 0) {
+      options.directory = expandTilde(options.directory);
+   }
+   
+   return options;   
 }
 
 function loadSubreddits(options) {
