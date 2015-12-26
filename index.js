@@ -24,28 +24,36 @@ const defaults = {
 };  
 
 function main(config) {
-   return loadConfig(config || path.join(userHome, '.reddit-wallpaper', 'config.json'))
-      .then(options => ensureDirectoryExists(options.directory)
-         .then(() => loadSubreddits(options)
-            .then(subreddits => selectWallpaperLink(options, subreddits))
-            .then(link => downloadFile(link.url, options.directory)
-               .then(file => wallpaper.set(file)
-                  .then(() => notify(link, file))
-                  .then(() => link)))));
+   if (typeof config === 'string') {
+      return loadConfig(config).then(run);
+   } else if (typeof config === 'undefined' || config === null) {
+      return loadConfig(path.join(userHome, '.reddit-wallpaper', 'config.json')).then(run);
+   } else {
+      return run(config);
+   }
 }
 
-function loadConfig(file, callback) {
+function run(options) {
+   return ensureDirectoryExists(options.directory)
+      .then(() => loadSubreddits(options)
+         .then(subreddits => selectWallpaperLink(options, subreddits))
+         .then(link => downloadFile(link.url, options.directory)
+            .then(file => wallpaper.set(file)
+               .then(() => notify(link, file))
+               .then(() => link))));
+}
+   
+
+function loadConfig(file) {
    return fs.readFileAsync(file).then(function (data) {
       let options = Object.assign(defaults, JSON.parse(data));
 
       if (options.domains) {
          options.domains = options.domains.map(domain => domain.toLowerCase());
       }
-
       if (options.files) {
          options.files = options.files.map(file => file.toLowerCase());
       }
-
       if (options.directory.indexOf('~') >= 0) {
          options.directory = expandTilde(options.directory);
       }
