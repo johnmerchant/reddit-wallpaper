@@ -29,7 +29,7 @@ function main(config) {
    } else if (config === '' || typeof config === 'undefined' || config === null) {
       return loadConfig(path.join(userHome, '.reddit-wallpaper', 'config.json')).then(run);
    } else if (typeof config === 'object') {
-      return run(config);
+      return run(Object.assign(defaults, config));
    } else {
       throw new TypeError('Expected string or object, got ' + typeof config);
    }
@@ -217,6 +217,7 @@ function ensureDirectoryExists(directory) {
 if (require.main === module) {
    main();   
 } else {
+   main.defaults = defaults;
    main.matchFile = matchFile;
    main.parseType = parseType;
    main.parseResolution = parseResolution;
