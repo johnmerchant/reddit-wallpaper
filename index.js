@@ -75,6 +75,13 @@ function loadSubreddit(options, subreddit) {
    return request(url).then(res => JSON.parse(res));
 }
 
+const defaultLink = {
+   score: 0,
+   createdUtc: 0,
+   ups: 0,
+   downs: 0
+};
+
 function selectWallpaperLink(options, subreddits) {
    let links = subreddits
       .filter(subreddit => subreddit.kind === 'Listing' && subreddit.data && subreddit.data.children)
@@ -86,6 +93,8 @@ function selectWallpaperLink(options, subreddits) {
             title: link.data.title,
             author: link.data.author,
             score: link.data.score,
+            ups: link.data.ups,
+            downs: link.data.downs,
             createdUtc: link.data.created_utc,
             domain: link.data.domain.toLowerCase(),
             type: parseType(link.data.url).toLowerCase(),
@@ -110,15 +119,57 @@ function selectWallpaperLink(options, subreddits) {
    if (options.shuffle) {
       return Promise.reduce(
          Promise.filter(links, link => fileExists(urlFilePath(link.url, options.directory)).then(exists => !exists)),
-         selectMaxLink,
-         { score: 0 }); 
+         selectLink(options.sort),
+         defaultLink); 
    }
    
-   return Promise.resolve(links.reduce(selectMaxLink, { score: 0 }));
+   return Promise.resolve(links.reduce(selectLink(options.sort), defaultLink));
 }
 
-function selectMaxLink(x, y) {
-   return x.score > y.score ? x : y;
+function selectLink(sort) {
+   switch (sort) {
+      case 'top':
+         return (x, y) => x.score > y.score ? x : y;
+         
+      case 'hot':
+         return (x, y) => heat(x) > heat(y) ? x : y;
+         
+      case 'controversial':
+         return (x, y) => controversy(x) > controversy(y) ? x : y;
+         
+      case 'new':
+         return (x, y) => x.createdUtc > y.createdUtc ? x : y;
+         
+      default:
+         throw new Error('Unknown sort ' + sort);
+   }
+}
+
+function heat(link) {
+   let order = Math.log10(Math.max(link.score, 1));
+
+   var sign;
+   if (link.score > 0) {
+      sign = 1;
+   } else if (link.score < 0) {
+      sign = -1;
+   } else {
+      sign = 0;
+   }
+   
+   let seconds = link.createdUtc - 1134028003;
+   return Math.round(sign * order + seconds / 45000, 7);
+}
+
+function controversy(link) {
+   if (link.downs < 0 || link.ups < 0) {
+      return 0;
+   }
+   
+   let magnitude = link.ups + links.downs;
+   let balance = link.ups > link.downs ? link.downs / link.ups : link.ups / link.downs;
+   
+   return Math.pow(magnitude, balance);
 }
 
 function downloadFile(url, directory) {
