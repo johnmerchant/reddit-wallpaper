@@ -42,7 +42,6 @@
     "moment": "^2.10.6",
     "node-notifier": "^4.4.0",
     "request-promise": "^1.0.2",
-    "tilde-expansion": "0.0.0",
     "user-home": "^2.0.0",
     "wallpaper": "^2.1.0"
   },
