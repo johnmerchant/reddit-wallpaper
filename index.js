@@ -8,7 +8,7 @@ const request = require('request-promise');
 const home = require('user-home');
 const expandTilde = require('expand-tilde');
 const wallpaper = require('wallpaper');
-const notifier = require('node-notifier');
+const notifier = Promise.promisifyAll(require('node-notifier'));
 const moment = require('moment');
 
 const defaults = {
@@ -213,31 +213,21 @@ function parseResolution(title) {
 
 function notify(link, icon) {
    let url = 'https://reddit.com' + link.permalink;
-   
-   return new Promise(function(resolve, reject) {
-      notifier.notify({
-         title: link.title,
-         subtitle: link.subreddit,
-         open: url,
-         wait: true,
-         message: [
-            '/r/',
-            link.subreddit,
-            ' ',
-            link.score,
-            ' points, ',
-            moment.unix(link.createdUtc).fromNow(),
-            ' by ',
-            link.author
-         ].join('')
-      }, function (err, res) {
-         if (err) {
-            reject(err);
-            return;
-         }
-         
-         resolve(res);
-      });
+   return notifier.notifyAsync({
+      title: link.title,
+      subtitle: link.subreddit,
+      open: url,
+      wait: true,
+      message: [
+         '/r/',
+         link.subreddit,
+         ' ',
+         link.score,
+         ' points, ',
+         moment.unix(link.createdUtc).fromNow(),
+         ' by ',
+         link.author
+      ].join('')
    });
 }
 
