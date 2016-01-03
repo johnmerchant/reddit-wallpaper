@@ -212,11 +212,10 @@ function parseResolution(title) {
 }
 
 function notify(link, icon) {
-   let url = 'https://reddit.com' + link.permalink;
    return notifier.notifyAsync({
       title: link.title,
       subtitle: link.subreddit,
-      open: url,
+      open: 'https://reddit.com' + link.permalink,
       wait: true,
       message: [
          '/r/',
