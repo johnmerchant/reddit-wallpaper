@@ -15,7 +15,7 @@
     "bin/reddit-wallpaper"
   ],
   "bin": {
-     "reddit-wallpaper": "bin/reddit-wallpaper"
+    "reddit-wallpaper": "bin/reddit-wallpaper"
   },
   "engines": {
     "node": ">=4.0.0"
@@ -41,7 +41,7 @@
     "expand-tilde": "^1.2.0",
     "moment": "^2.10.6",
     "node-notifier": "^4.4.0",
-    "request-promise": "^1.0.2",
+    "request-promise": "^3.0.0",
     "user-home": "^2.0.0",
     "wallpaper": "^2.1.0"
   },
